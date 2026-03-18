@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_nome">TaskFlow - Robert Lindomar</string>
+
+    <!-- Main/Dashboard -->
+    <string name="mensagem_boas_vindas">Suas tarefas</string>
+    <string name="subtitulo_boas_vindas">Organize seu dia e aumente sua produtividade</string>
+    <string name="mensagem_estado_vazio">Nenhuma tarefa ainda.\nToque em Nova Tarefa no menu para adicionar.</string>
+    <string name="descricao_fab_adicionar_tarefa">Adicionar nova tarefa</string>
+    <string name="menu_categoria">Categoria</string>
+    <string name="menu_nova_tarefa">Nova Tarefa</string>
+    <string name="menu_voltar">Voltar</string>
+
+    <!-- Cadastro de Tarefa -->
+    <string name="titulo_cadastro_tarefa">Cadastro de Tarefa</string>
+    <string name="subtitulo_cadastro_tarefa">Preencha os campos abaixo para criar sua tarefa</string>
+    <string name="dica_titulo_tarefa">Título da tarefa</string>
+    <string name="dica_descricao_tarefa">Descrição da tarefa</string>
+    <string name="dica_categoria">Categoria</string>
+    <string name="dica_data_limite">Data limite</string>
+    <string name="rotulo_prioridade">Prioridade</string>
+    <string name="prioridade_baixa">Baixa</string>
+    <string name="prioridade_media">Média</string>
+    <string name="prioridade_alta">Alta</string>
+    <string name="botao_salvar_tarefa">Salvar Tarefa</string>
+    <string name="botao_cancelar_tarefa">Cancelar</string>
+    <string name="erro_titulo_tarefa_vazio">Digite o título da tarefa</string>
+    <string name="tarefa_salva_sucesso">Tarefa salva com sucesso!</string>
+
+    <!-- Cadastro de Categoria -->
+    <string name="titulo_cadastro_categoria">Cadastro de Categoria</string>
+    <string name="subtitulo_cadastro_categoria">Crie uma nova categoria para organizar suas tarefas</string>
+    <string name="dica_nome_categoria">Nome da categoria</string>
+    <string name="erro_nome_categoria_vazio">Digite o nome da categoria</string>
+    <string name="botao_salvar_categoria">Salvar Categoria</string>
+</resources>

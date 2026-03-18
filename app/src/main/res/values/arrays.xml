@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task_categories">
+        <item>Estudo</item>
+        <item>Trabalho</item>
+        <item>Casa</item>
+        <item>Projetos</item>
+    </string-array>
+</resources>
