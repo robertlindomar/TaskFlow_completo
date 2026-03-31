@@ -4,7 +4,19 @@
     <!-- Main/Dashboard -->
     <string name="mensagem_boas_vindas">Suas tarefas</string>
     <string name="subtitulo_boas_vindas">Organize seu dia e aumente sua produtividade</string>
+    <string name="botao_dados_ficticios">Demo</string>
+    <string name="botao_limpar_banco">Limpar</string>
+    <string name="confirmar_limpar_banco_titulo">Limpar banco de dados</string>
+    <string name="confirmar_limpar_banco_mensagem">Todas as tarefas e categorias serão apagadas. Deseja continuar?</string>
+    <string name="toast_dados_ficticios_ok">Dados de demonstração adicionados.</string>
+    <string name="toast_banco_limpo">Banco de dados limpo.</string>
+    <string name="erro_generico">Algo deu errado.</string>
+
     <string name="mensagem_estado_vazio">Nenhuma tarefa ainda.\nToque em Nova Tarefa no menu para adicionar.</string>
+    <string name="filtro_tarefas_a_fazer">A fazer</string>
+    <string name="filtro_tarefas_concluidas">Concluídas</string>
+    <string name="mensagem_nenhuma_a_fazer">Nenhuma tarefa a fazer no momento.</string>
+    <string name="mensagem_nenhuma_concluida">Nenhuma tarefa concluída ainda.</string>
     <string name="descricao_fab_adicionar_tarefa">Adicionar nova tarefa</string>
     <string name="menu_categoria">Categoria</string>
     <string name="menu_nova_tarefa">Nova Tarefa</string>
@@ -23,7 +35,19 @@
     <string name="prioridade_alta">Alta</string>
     <string name="botao_salvar_tarefa">Salvar Tarefa</string>
     <string name="botao_cancelar_tarefa">Cancelar</string>
+
     <string name="erro_titulo_tarefa_vazio">Digite o título da tarefa</string>
+    <string name="erro_descricao_tarefa_vazio">Digite a descrição da tarefa</string>
+    <string name="erro_categoria_tarefa_vazio">Selecione uma categoria</string>
+    <string name="erro_categoria_tarefa_inexistente">Categoria não encontrada. Cadastre ou selecione outra.</string>
+    <string name="item_tarefa_meta">%1$s · %2$s · %3$s</string>
+    <string name="botao_marcar_concluida">Marcar como concluída</string>
+    <string name="label_tarefa_ja_concluida">Concluída</string>
+    <string name="erro_data_limite_tarefa_vazio">Selecione uma data limite</string>
+    <string name="erro_data_invalida">Data inválida. Use o formato dd/mm/aaaa.</string>
+    <string name="erro_prioridade_nao_selecionada">Selecione uma prioridade</string>
+
+
     <string name="tarefa_salva_sucesso">Tarefa salva com sucesso!</string>
 
     <!-- Cadastro de Categoria -->
@@ -32,4 +56,14 @@
     <string name="dica_nome_categoria">Nome da categoria</string>
     <string name="erro_nome_categoria_vazio">Digite o nome da categoria</string>
     <string name="botao_salvar_categoria">Salvar Categoria</string>
+    <string name="botao_atualizar_categoria">Atualizar</string>
+    <string name="categoria_salva_sucesso">Categoria \"%1$s\" salva!</string>
+    <string name="categoria_atualizada_sucesso">Categoria atualizada!</string>
+    <string name="categoria_excluida_sucesso">Categoria excluída!</string>
+    <string name="titulo_lista_categorias">Categorias cadastradas</string>
+    <string name="acao_editar">Editar</string>
+    <string name="acao_excluir">Excluir</string>
+    <string name="confirmar_exclusao">Excluir categoria \"%1$s\"?</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
 </resources>

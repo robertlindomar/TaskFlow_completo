@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+
+# SDK local (cada máquina gera o seu — não versionar)
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# NDK / CMake
+.externalNativeBuild/
+.cxx/
+
+# Capturas e relatórios locais
+captures/
+*.hprof
+
+# Assinatura de release (nunca commitar)
+*.jks
+*.keystore
+
+# OS
+.DS_Store
+Thumbs.db

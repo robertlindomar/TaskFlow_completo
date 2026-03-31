@@ -3,22 +3,32 @@ package com.prova.taskflow
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.RadioGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.prova.taskflow.data.entity.Task
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class RegistroTaskActivity : AppCompatActivity() {
+    private val categoriaRepository get() = (application as TaskFlowApplication).categoriaRepository
+    private val taskRepository get() = (application as TaskFlowApplication).taskRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +40,8 @@ class RegistroTaskActivity : AppCompatActivity() {
             insets
         }
 
+
+
         val botaoCancelarTarefa = findViewById<MaterialButton>(R.id.botao_cancelar_tarefa)
         val chipVoltar = findViewById<MaterialButton>(R.id.chip_voltar)
         val chipCategoriaCadastro = findViewById<MaterialButton>(R.id.chip_categoria_cadastro)
@@ -37,18 +49,36 @@ class RegistroTaskActivity : AppCompatActivity() {
 
         val layoutTitulo = findViewById<TextInputLayout>(R.id.layout_entrada_titulo)
         val campoTitulo = findViewById<TextInputEditText>(R.id.campo_titulo)
+
+        val layoutDescricao = findViewById<TextInputLayout>(R.id.layout_entrada_descricao)
         val campoDescricao = findViewById<TextInputEditText>(R.id.campo_descricao)
+
+        val layoutCategoria = findViewById<TextInputLayout>(R.id.layout_entrada_categoria)
         val dropdownCategoria = findViewById<MaterialAutoCompleteTextView>(R.id.dropdown_categoria)
+
+        val layoutPrioridade = findViewById<TextInputLayout>(R.id.layout_entrada_prioridade)
         val grupoPrioridade = findViewById<RadioGroup>(R.id.grupo_prioridade)
+
+        val layoutData = findViewById<TextInputLayout>(R.id.layout_entrada_data_limite)
         val campoData = findViewById<TextInputEditText>(R.id.campo_data_limite)
 
-        // Dropdown de categorias
-        //Carrega o array de categorias de arrays.xml.
-        val categorias = resources.getStringArray(R.array.task_categories)
-        //Cria um adaptador que liga essas strings ao layout padrão de dropdown.
-        val adapterCategoria = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categorias)
-        //Associa o adaptador ao campo para que as categorias apareçam ao abrir o dropdown.
-        dropdownCategoria.setAdapter(adapterCategoria)
+
+
+        // Carregar categorias do banco de dados e configurar o dropdown
+        lifecycleScope.launch {
+            val lista = withContext(Dispatchers.IO) {
+                categoriaRepository.getAllSync()
+            }
+            val nomes = lista.map { it.nome }
+            val adapterCategoria = ArrayAdapter(
+                this@RegistroTaskActivity,
+                android.R.layout.simple_dropdown_item_1line,
+                nomes
+            )
+            dropdownCategoria.setAdapter(adapterCategoria)
+        }
+
+
 
         // DatePicker para data limite
         campoData.setOnClickListener {
@@ -73,22 +103,76 @@ class RegistroTaskActivity : AppCompatActivity() {
                 layoutTitulo.error = getString(R.string.erro_titulo_tarefa_vazio)
                 return@setOnClickListener
             }
-
             layoutTitulo.error = null
 
             val descricao = campoDescricao.text.toString().trim()
-            val categoria = dropdownCategoria.text.toString().trim()
-
-            val prioridade = when (grupoPrioridade.checkedRadioButtonId) {
-                R.id.opcao_prioridade_baixa -> "Baixa"
-                R.id.opcao_prioridade_alta -> "Alta"
-                else -> "Média"
+            if (descricao.isEmpty()) {
+                layoutDescricao.error = getString(R.string.erro_descricao_tarefa_vazio)
+                return@setOnClickListener
             }
-            val dataLimite = campoData.text.toString().trim()
+            layoutDescricao.error = null
 
-            // TODO: Salvar no Room Database
-            Toast.makeText(this, R.string.tarefa_salva_sucesso, Toast.LENGTH_SHORT).show()
-            finish()
+            val nomeCategoria = dropdownCategoria.text.toString().trim()
+            if (nomeCategoria.isEmpty()) {
+                layoutCategoria.error = getString(R.string.erro_categoria_tarefa_vazio)
+                return@setOnClickListener
+            }
+            layoutCategoria.error = null
+
+            if (grupoPrioridade.checkedRadioButtonId == View.NO_ID) {
+                layoutPrioridade.error = getString(R.string.erro_prioridade_nao_selecionada)
+                return@setOnClickListener
+            }
+            layoutPrioridade.error = null
+
+            val codigoPrioridade = when (grupoPrioridade.checkedRadioButtonId) {
+                R.id.opcao_prioridade_baixa -> 0
+                R.id.opcao_prioridade_media -> 1
+                R.id.opcao_prioridade_alta -> 2
+                else -> 1
+            }
+
+            val dataLimite = campoData.text.toString().trim()
+            if (dataLimite.isEmpty()) {
+                layoutData.error = getString(R.string.erro_data_limite_tarefa_vazio)
+                return@setOnClickListener
+            }
+            layoutData.error = null
+
+            val formatoData = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dataHora = formatoData.parse(dataLimite)?.time
+            if (dataHora == null) {
+                layoutData.error = getString(R.string.erro_data_invalida)
+                return@setOnClickListener
+            }
+            layoutData.error = null
+
+            lifecycleScope.launch {
+                val categoriaId = withContext(Dispatchers.IO) {
+                    categoriaRepository.getByName(nomeCategoria)
+                }
+                if (categoriaId == null) {
+                    layoutCategoria.error = getString(R.string.erro_categoria_tarefa_inexistente)
+                    return@launch
+                }
+                layoutCategoria.error = null
+
+                try {
+                    taskRepository.insert(
+                        Task(
+                            titulo = titulo,
+                            descricao = descricao,
+                            categoriaId = categoriaId,
+                            prioridade = codigoPrioridade,
+                            dataHora = dataHora
+                        )
+                    )
+                    Toast.makeText(this@RegistroTaskActivity, R.string.tarefa_salva_sucesso, Toast.LENGTH_SHORT).show()
+                    finish()
+                } catch (e: Exception) {
+                    Toast.makeText(this@RegistroTaskActivity, e.message ?: "Erro", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         botaoCancelarTarefa.setOnClickListener { finish() }

@@ -1,1 +1,5 @@
+# Saída de compilação do módulo app
 /build
+
+# APK/AAB gerados localmente (se existir pasta release no módulo)
+/release
